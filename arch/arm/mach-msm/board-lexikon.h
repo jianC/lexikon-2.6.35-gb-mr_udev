@@ -159,7 +159,7 @@
 
 int lexikon_init_mmc(unsigned int sys_rev);
 void __init lexikon_audio_init(void);
-int lexikon_init_keypad(void);
+int __init lexikon_init_keypad(void);
 int __init lexikon_wifi_init(void);
 int __init lexikon_init_panel(unsigned int sys_rev);
 #endif /* __ARCH_ARM_MACH_MSM_BOARD_LEXIKON_H */
