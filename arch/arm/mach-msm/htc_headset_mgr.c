@@ -504,6 +504,10 @@ static void mic_detect_work_func(struct work_struct *work)
 		new_state |= BIT_HEADSET;
 		HS_LOG_TIME("HEADSET_BEATS");
 		break;
+	case HEADSET_BEATS_SOLO:
+		new_state |= BIT_HEADSET;
+		HS_LOG("HEADSET_BEATS_SOLO");
+		break;
 	case HEADSET_INDICATOR:
 		HS_LOG_TIME("HEADSET_INDICATOR");
 		break;
@@ -709,6 +713,10 @@ static void insert_detect_work_func(struct work_struct *work)
 		state |= BIT_HEADSET;
 		HS_LOG_TIME("HEADSET_BEATS");
 		break;
+	case HEADSET_BEATS_SOLO:
+		state |= BIT_HEADSET;
+		HS_LOG_TIME("HEADSET_BEATS_SOLO");
+		break;
 	case HEADSET_INDICATOR:
 		HS_LOG_TIME("HEADSET_INDICATOR");
 		break;
@@ -903,6 +911,9 @@ static ssize_t headset_state_show(struct device *dev,
 		break;
 	case HEADSET_BEATS:
 		state = "headset_beats";
+		break;
+	case HEADSET_BEATS_SOLO:
+		state = "headset_beats_solo";
 		break;
 	case HEADSET_INDICATOR:
 		state = "headset_indicator";

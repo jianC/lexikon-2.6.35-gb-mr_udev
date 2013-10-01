@@ -54,7 +54,8 @@
 #define ACOUSTIC_ENABLE_BACK_MIC	_IOW(ACOUSTIC_IOCTL_MAGIC, 34, unsigned)
 #define ACOUSTIC_UPDATE_AIC3254_INFO	_IOW(ACOUSTIC_IOCTL_MAGIC, 36, unsigned)
 #define ACOUSTIC_GET_RECEIVER_STATE		_IOW(ACOUSTIC_IOCTL_MAGIC, 37, int)
-
+#define ACOUSTIC_GET_BEATS_STATE	_IOW(ACOUSTIC_IOCTL_MAGIC, 41, unsigned)
+#define ACOUSTIC_ENABLE_BEATS		_IOW(ACOUSTIC_IOCTL_MAGIC, 42, unsigned)
 
 #define D(fmt, args...) printk(KERN_INFO "[AUD] htc-acoustic: "fmt, ##args)
 #define E(fmt, args...) printk(KERN_ERR "[AUD] htc-acoustic: "fmt, ##args)
@@ -426,6 +427,29 @@ acoustic_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			E("acoustic_ioctl: ACOUSTIC_GET_RECEIVER failed\n");
 			rc = -EFAULT;
 		}
+		break;
+	}
+	case ACOUSTIC_GET_BEATS_STATE: {
+		int support_beats = 0;
+		if (the_ops->support_beats)
+			support_beats = the_ops->support_beats();
+		D("support_beats: %d\n", support_beats);
+		if (copy_to_user((void *) arg,
+			&support_beats, sizeof(int))) {
+			E("acoustic_ioctl: copy to user failed\n");
+			rc = -EFAULT;
+		}
+		break;
+	}
+	case ACOUSTIC_ENABLE_BEATS: {
+		int en = 0;
+		if (copy_from_user(&en, (void *)arg, sizeof(int))) {
+			rc = -EFAULT;
+			break;
+		}
+		E("Enable Beats : %d\n", en);
+		if (the_ops->enable_beats)
+			the_ops->enable_beats(en);
 		break;
 	}
 
